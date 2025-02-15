@@ -1,4 +1,4 @@
-import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
 import {ThemeProvider} from './context/ThemeContext';
 import LandingPage from './pages/LandingPage';
 import Login from './pages/Login';
@@ -11,15 +11,22 @@ import {MeetingProvider} from './context/MeetingContext';
 import Meetings from './pages/Meeting';
 
 
+
 function App () {
   const [slots, setSlots] = useState ([]);
-  
-  const [setIsLoggedIn] = useState (false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   // Added sidebar state
   const [isSidebarOpen, setIsSidebarOpen] = useState (true);
 
   const addSlot = newSlot => {
     setSlots ([...slots, {...newSlot, id: Date.now ()}]);
+  };
+
+  const ProtectedRoute = ({ children }) => {
+    if (!isLoggedIn) {
+      return <Navigate to="/login" replace />;
+    }
+    return children;
   };
 
   return (
@@ -36,23 +43,25 @@ function App () {
               path="/register"
               element={<Register setIsLoggedIn={setIsLoggedIn} />}
             />
-            <Route
+             <Route
               path="/dashboard"
               element={
-                <div className="flex">
-                  {/* <Sidebar
-                    username="User123"
-                    isOpen={isSidebarOpen}
-                    toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-                  /> */}
-                  <Dashboard
-                    username="Vedali"
-                    slots={slots}
-                    addSlot={addSlot}
-                    timezone="UTC"
-                    setTimezone={() => {}}
-                  />
-                </div>
+                <ProtectedRoute>
+                  <div className="flex">
+                    <Sidebar
+                      username="Vedali"
+                      isOpen={isSidebarOpen}
+                      toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+                    />
+                    <Dashboard
+                      username="Vedali"
+                      slots={slots}
+                      addSlot={addSlot}
+                      timezone="UTC"
+                      setTimezone={() => {}}
+                    />
+                  </div>
+                </ProtectedRoute>
               }
             />
 

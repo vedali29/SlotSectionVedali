@@ -11,6 +11,7 @@ import {
   Moon
 } from 'react-feather';
 import Navbar from '../components/common/Navbar';
+import index from "../assets/index.webp"
 
 const LandingPage = () => {
   const { darkMode, toggleDarkMode } = useTheme();
@@ -80,11 +81,10 @@ const LandingPage = () => {
               variants={fadeInUp}
               className="hidden md:block"
             >
-              {/* Add your hero image here */}
               <img 
-                src="/path-to-your-hero-image.svg" 
+                src={index} 
                 alt="Scheduling Illustration"
-                className="w-full h-auto"
+                className="w-full h-auto rounded-xl"
               />
             </motion.div>
           </motion.div>
